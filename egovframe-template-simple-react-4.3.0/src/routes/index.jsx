@@ -79,6 +79,7 @@ import initPage from "@/js/ui";
 //crud화면 test
 import TestNoticeList from "@/pages/testlv1/testlv2/EgovNoticeList";
 import TestNoticeDetail from "@/pages/testlv1/testlv2/EgovNoticeDetail";
+import TestNoticeEdit from "@/pages/testlv1/testlv2/EgovNoticeEdit";
 
 const RootRoutes = () => {
   //useLocation객체를 이용하여 정규표현식을 사용한 /admin/~ 으로 시작하는 경로와 비교에 사용(아래 1줄) */}
@@ -360,7 +361,15 @@ const SecondRoutes = () => {
         />
         {/* crud화면 테스트 */}
         <Route path={URL.TEST_NOTICE} element={<TestNoticeList />} />
-        <Route path={URL.TEST_NOTICE_DETAIL} element={<TestNoticeDetail />} />        
+        <Route path={URL.TEST_NOTICE_DETAIL} element={<TestNoticeDetail />} />
+        <Route
+          path={URL.TEST_NOTICE_CREATE}
+          element={<TestNoticeEdit mode={CODE.MODE_CREATE} />}
+        />
+        <Route
+          path={URL.TEST_NOTICE_MODIFY}
+          element={<TestNoticeEdit mode={CODE.MODE_MODIFY} />}
+        />        
       </Routes>
 
       <EgovFooter />

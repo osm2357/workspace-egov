@@ -54,64 +54,67 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 	 *
 	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#deleteBoardArticle(egovframework.let.cop.bbs.brd.service.Board)
 	 */
-//	@Override
-//	public void deleteBoardArticle(Board board) throws Exception {
-//		FileVO fvo = new FileVO();
-//
-//		fvo.setAtchFileId(board.getAtchFileId());
-//
-//		board.setNttSj("이 글은 작성자에 의해서 삭제되었습니다.");
-//
-//		bbsMngDAO.deleteBoardArticle(board);
-//
-//		if (!"".equals(fvo.getAtchFileId()) || fvo.getAtchFileId() != null) {
-//			fileService.deleteAllFileInf(fvo);
-//		}
-//	}
+	@Override
+	public void deleteBoardArticle(Board board) throws Exception {
+		FileVO fvo = new FileVO();
+
+		fvo.setAtchFileId(board.getAtchFileId());
+
+		board.setNttSj("이 글은 작성자에 의해서 삭제되었습니다.");
+
+		bbsMngDAO.deleteBoardArticle(board);
+
+		if (!"".equals(fvo.getAtchFileId()) || fvo.getAtchFileId() != null) {
+			fileService.deleteAllFileInf(fvo);
+		}
+	}
 
 	/**
 	 * 게시판에 게시물 또는 답변 게시물을 등록 한다.
 	 *
 	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#insertBoardArticle(egovframework.let.cop.bbs.brd.service.Board)
 	 */
-//	@Override
-//	public void insertBoardArticle(Board board) throws Exception {
-//		// SORT_ORDR는 부모글의 소트 오더와 같게, NTT_NO는 순서대로 부여
-//
-//		if ("Y".equals(board.getReplyAt())) {
-//			// 답글인 경우 1. Parnts를 세팅, 2.Parnts의 sortOrdr을 현재글의 sortOrdr로 가져오도록, 3.nttNo는 현재 게시판의 순서대로
-//			// replyLc는 부모글의 ReplyLc + 1
-//
-//			@SuppressWarnings("unused") long tmpNttId = 0L; // 답글 게시물 ID
-//
-//			tmpNttId = bbsMngDAO.replyBoardArticle(board);
-//
-//		} else {
-//			// 답글이 아닌경우 Parnts = 0, replyLc는 = 0, sortOrdr = nttNo(Query에서 처리)
-//			board.setParnts("0");
-//			board.setReplyLc("0");
-//			board.setReplyAt("N");
-//
-//			bbsMngDAO.insertBoardArticle(board);
-//		}
-//	}
+	@Override
+	public void insertBoardArticle(Board board) throws Exception {
+		// SORT_ORDR는 부모글의 소트 오더와 같게, NTT_NO는 순서대로 부여
+
+		if ("Y".equals(board.getReplyAt())) {
+			// 답글인 경우 1. Parnts를 세팅, 2.Parnts의 sortOrdr을 현재글의 sortOrdr로 가져오도록, 3.nttNo는 현재 게시판의 순서대로
+			// replyLc는 부모글의 ReplyLc + 1
+
+			@SuppressWarnings("unused") long tmpNttId = 0L; // 답글 게시물 ID
+
+			tmpNttId = bbsMngDAO.replyBoardArticle(board);
+
+		} else {
+			// 답글이 아닌경우 Parnts = 0, replyLc는 = 0, sortOrdr = nttNo(Query에서 처리)
+			board.setParnts("0");
+			board.setReplyLc("0");
+			board.setReplyAt("N");
+
+			bbsMngDAO.insertBoardArticle(board);
+		}
+	}
 
 	/**
 	 * 게시물 대하여 상세 내용을 조회 한다.
 	 *
 	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#selectBoardArticle(egovframework.let.cop.bbs.brd.service.BoardVO)
 	 */
-//	@Override
-//	public BoardVO selectBoardArticle(BoardVO boardVO) throws Exception {
-//		if (boardVO.isPlusCount()) {
-//			int iniqireCo = bbsMngDAO.selectMaxInqireCo(boardVO);
-//
-//			boardVO.setInqireCo(iniqireCo);
-//			bbsMngDAO.updateInqireCo(boardVO);
-//		}
-//
-//		return bbsMngDAO.selectBoardArticle(boardVO);
-//	}
+	@Override
+	public BoardVO selectBoardArticle(BoardVO boardVO) throws Exception {
+		if (boardVO.isPlusCount()) {
+			int iniqireCo = bbsMngDAO.selectMaxInqireCo(boardVO);
+
+			boardVO.setInqireCo(iniqireCo);
+			bbsMngDAO.updateInqireCo(boardVO);
+			
+			//throw new Exception("testerror");
+		}
+		
+
+		return bbsMngDAO.selectBoardArticle(boardVO);
+	}
 
 	/**
 	 * 조건에 맞는 게시물 목록을 조회 한다.
@@ -160,10 +163,10 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 	 *
 	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#updateBoardArticle(egovframework.let.cop.bbs.brd.service.Board)
 	 */
-//	@Override
-//	public void updateBoardArticle(Board board) throws Exception {
-//		bbsMngDAO.updateBoardArticle(board);
-//	}
+	@Override
+	public void updateBoardArticle(Board board) throws Exception {
+		bbsMngDAO.updateBoardArticle(board);
+	}
 
 	/**
 	 * 방명록 내용을 삭제 한다.

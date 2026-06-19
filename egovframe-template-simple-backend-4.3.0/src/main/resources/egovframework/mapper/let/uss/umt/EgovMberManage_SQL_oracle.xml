@@ -28,29 +28,29 @@
 		    uniqId, orgnztId, userTy, userId , userNm, emailAdres, areaNo, middleTelno, endTelno, moblphonNo, groupId, sttus, sbscrbDe
 		FROM(  SELECT rownum rn, TB.* FROM (
 		    SELECT 
-		        ESNTL_ID             as "uniqId",
-		        ORGNZT_ID		  	 as "orgnztId",
-		        'USR01'              as "userTy",
-		        EMPLYR_ID            as "userId",
-		        USER_NM             as "userNm",
-		        EMAIL_ADRES         as "emailAdres",
-		        AREA_NO             as "areaNo",
-		        HOUSE_MIDDLE_TELNO  as "middleTelno",
-		        HOUSE_END_TELNO     as "endTelno",
-		        MBTLNUM           as "moblphonNo",
-		        GROUP_ID          as "groupId",
-		        EMPLYR_STTUS_CODE as "sttus",
-		        TO_CHAR(SBSCRB_DE, 'YYYY-MM-DD HH24:MI:SS') as "sbscrbDe"
+		        ESNTL_ID             as uniqId,
+		        ORGNZT_ID		  	 as orgnztId,
+		        'USR01'              as userTy,
+		        EMPLYR_ID            as userId,
+		        USER_NM             as userNm,
+		        EMAIL_ADRES         as emailAdres,
+		        AREA_NO             as areaNo,
+		        HOUSE_MIDDLE_TELNO  as middleTelno,
+		        HOUSE_END_TELNO     as endTelno,
+		        MBTLNUM           as moblphonNo,
+		        GROUP_ID          as groupId,
+		        EMPLYR_STTUS_CODE as sttus,
+		        TO_CHAR(SBSCRB_DE, 'YYYY-MM-DD HH24:MI:SS') as sbscrbDe
 		    FROM    LETTNEMPLYRINFO
 		    WHERE 1=1
 		    <if test="sbscrbSttus != 0">AND
-		    	EMPLYR_STTUS_CODE LIKE CONCAT('%' , #{sbscrbSttus}, '%')
+		    	EMPLYR_STTUS_CODE LIKE ('%' || #{sbscrbSttus} || '%')
 		    </if>
 		    <if test="searchCondition == 0">AND
-		    	EMPLYR_ID LIKE CONCAT('%' , #{searchKeyword}, '%')
+		    	EMPLYR_ID LIKE ('%' || #{searchKeyword} || '%')
 		    </if>
 		    <if test="searchCondition == 1">AND
-		    	USER_NM LIKE CONCAT('%' , #{searchKeyword}, '%')
+		    	USER_NM LIKE ('%'|| #{searchKeyword} || '%')
 		    </if>
 		    ORDER BY SBSCRB_DE DESC
 	    ) TB ) WHERE rn BETWEEN #{firstIndex} + 1 AND #{firstIndex} + #{recordCountPerPage}
@@ -74,17 +74,17 @@
 	            EMPLYR_STTUS_CODE            sttus,
 	            SBSCRB_DE             sbscrbDe
 	        FROM    LETTNEMPLYRINFO
+	        WHERE 1=1
+		    <if test="sbscrbSttus != 0">AND
+		    	EMPLYR_STTUS_CODE LIKE ('%' || #{sbscrbSttus} || '%')
+		    </if>
+		    <if test="searchCondition == 0">AND
+		    	EMPLYR_ID LIKE ('%' || #{searchKeyword} || '%')
+		    </if>
+		    <if test="searchCondition == 1">AND
+		    	USER_NM LIKE ('%'|| #{searchKeyword} || '%')
+		    </if>	        
 	    ) A
-        WHERE 1=1
-        <if test="sbscrbSttus != 0">AND
-		    EMPLYR_STTUS_CODE LIKE CONCAT('%' , #{sbscrbSttus}, '%')
-	    </if>
-	    <if test="searchCondition == 0">AND
-	    	EMPLYR_ID LIKE CONCAT('%' , #{searchKeyword}, '%')
-	    </if>
-	    <if test="searchCondition == 1">AND
-	    	USER_NM LIKE CONCAT('%' , #{searchKeyword}, '%')
-	    </if>
     </select>
     
     <insert id="insertMber_S">

@@ -2,6 +2,7 @@ package testlv1.testlv2.service;
 
 import java.util.Map;
 
+import egovframework.let.cop.bbs.service.Board;
 import egovframework.let.cop.bbs.service.BoardVO;
 
 /**
@@ -29,8 +30,8 @@ public interface TestEgovBBSManageService {
 	 * @param Board
 	 * @exception Exception Exception
 	 */
-//	public void deleteBoardArticle(Board Board)
-//	  throws Exception;
+	public void deleteBoardArticle(Board Board)
+	  throws Exception;
 
 	/**
 	 * 방명록 내용을 삭제 한다.
@@ -57,8 +58,8 @@ public interface TestEgovBBSManageService {
 	 * @param Board
 	 * @exception Exception Exception
 	 */
-//	public void insertBoardArticle(Board Board)
-//	  throws Exception;
+	public void insertBoardArticle(Board Board)
+	  throws Exception;
 
 	/**
 	 * 게시물 대하여 상세 내용을 조회 한다.
@@ -67,8 +68,8 @@ public interface TestEgovBBSManageService {
 	 * @param boardVO
 	 * @exception Exception Exception
 	 */
-//	public BoardVO selectBoardArticle(BoardVO boardVO)
-//	  throws Exception;
+	public BoardVO selectBoardArticle(BoardVO boardVO)
+	  throws Exception;
 
 	/**
 	 * 조건에 맞는 게시물 목록을 조회 한다.
@@ -97,7 +98,7 @@ public interface TestEgovBBSManageService {
 	 * @param Board
 	 * @exception Exception Exception
 	 */
-//	public void updateBoardArticle(Board Board)
-//	  throws Exception;
+	public void updateBoardArticle(Board Board)
+	  throws Exception;
 
 }

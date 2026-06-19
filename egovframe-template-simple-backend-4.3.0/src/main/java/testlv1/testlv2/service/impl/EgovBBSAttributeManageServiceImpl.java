@@ -19,6 +19,7 @@ import egovframework.let.cop.com.service.EgovUserInfManageService;
 import egovframework.let.cop.com.service.UserInfVO;
 import egovframework.let.cop.com.service.impl.BBSUseInfoManageDAO;
 import lombok.extern.slf4j.Slf4j;
+import egovframework.let.cop.bbs.service.impl.BBSAddedOptionsDAO;
 
 /**
  * 게시판 속성관리를 위한 서비스 구현 클래스
@@ -60,8 +61,8 @@ public class EgovBBSAttributeManageServiceImpl extends EgovAbstractServiceImpl i
     //---------------------------------
     // 2009.06.26 : 2단계 기능 추가
     //---------------------------------
-    @Resource(name = "TestBBSAddedOptionsDAO")
-    private TestBBSAddedOptionsDAO addedOptionsDAO;
+    @Resource(name = "BBSAddedOptionsDAO")
+    private BBSAddedOptionsDAO addedOptionsDAO;
     ////-------------------------------
 
     /**

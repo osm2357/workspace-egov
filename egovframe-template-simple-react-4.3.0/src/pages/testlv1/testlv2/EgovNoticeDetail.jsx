@@ -33,7 +33,7 @@ function EgovNoticeDetail(props) {
   const [boardAttachFiles, setBoardAttachFiles] = useState();
 
   const retrieveDetail = () => {
-    const retrieveDetailURL = `/board/${bbsId}/${nttId}`;
+    const retrieveDetailURL = `/testBoard/${bbsId}/${nttId}`;
     const requestOptions = {
       method: "GET",
       headers: {
@@ -49,7 +49,7 @@ function EgovNoticeDetail(props) {
   };
 
   const onClickDeleteBoardArticle = (bbsId, nttId) => {
-    const deleteBoardURL = `/board/${bbsId}/${nttId}`;
+    const deleteBoardURL = `/testBoard/${bbsId}/${nttId}`;
 
     const requestOptions = {
       method: "PATCH",
@@ -62,7 +62,7 @@ function EgovNoticeDetail(props) {
       console.log("====>>> board delete= ", resp);
       if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
         alert("게시글이 삭제되었습니다.");
-        navigate(URL.INFORM_NOTICE, { replace: true });
+        navigate(URL.TEST_NOTICE, { replace: true });
       } else {
         navigate(
           { pathname: URL.ERROR },
@@ -155,7 +155,7 @@ function EgovNoticeDetail(props) {
                   masterBoard.bbsUseFlag === "Y" && (
                     <div className="left_col btn3">
                       <Link
-                        to={{ pathname: URL.INFORM_NOTICE_MODIFY }}
+                        to={{ pathname: URL.TEST_NOTICE_MODIFY }}
                         state={{
                           nttId: nttId,
                           bbsId: bbsId,
@@ -193,7 +193,7 @@ function EgovNoticeDetail(props) {
 
                 <div className="right_col btn1">
                   <Link
-                    to={{ pathname: URL.INFORM_NOTICE }}
+                    to={{ pathname: URL.TEST_NOTICE }}
                     state={{
                       nttId: nttId,
                       bbsId: bbsId,

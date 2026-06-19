@@ -31,9 +31,9 @@ public class TestBBSAddedOptionsDAO extends EgovAbstractMapper {
      * 
      * @param BoardMaster
      */
-    public int insertAddedOptionsInf(BoardMaster boardMaster) throws Exception {
-	return (int)insert("BBSAddedOptionsDAO.insertAddedOptionsInf", boardMaster);
-    }
+//    public int insertAddedOptionsInf(BoardMaster boardMaster) throws Exception {
+//	return (int)insert("BBSAddedOptionsDAO.insertAddedOptionsInf", boardMaster);
+//    }
     
     /**
      * 게시판 추가기능 정보 한 건을 상세조회 한다.
@@ -49,7 +49,7 @@ public class TestBBSAddedOptionsDAO extends EgovAbstractMapper {
      * 
      * @param BoardMaster
      */
-    public void updateAddedOptionsInf(BoardMaster boardMaster) throws Exception {
-	update("BBSAddedOptionsDAO.updateAddedOptionsInf", boardMaster);
-    }
+//    public void updateAddedOptionsInf(BoardMaster boardMaster) throws Exception {
+//	update("BBSAddedOptionsDAO.updateAddedOptionsInf", boardMaster);
+//    }
 }

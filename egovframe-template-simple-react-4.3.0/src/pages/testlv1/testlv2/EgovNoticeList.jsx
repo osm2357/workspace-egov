@@ -209,7 +209,7 @@ function EgovNoticeList(props) {
                   masterBoard.bbsUseFlag === "Y" && (
                     <li>
                       <Link
-                        to={URL.INFORM_NOTICE_CREATE}
+                        to={URL.TEST_NOTICE_CREATE}
                         state={{ bbsId: bbsId }}
                         className="btn btn_blue_h46 pd35"
                       >

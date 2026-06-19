@@ -87,6 +87,8 @@ const URL = {
   //test화면
   TEST_NOTICE: "/testlv1/testlv2", // 알림마당/공지사항
   TEST_NOTICE_DETAIL: "/testlv1/testlv2/detail", // 알림마당/공지사항상세
+  TEST_NOTICE_CREATE: "/testlv1/testlv2/create", // 알림마당/공지사항등록
+  TEST_NOTICE_MODIFY: "/testlv1/testlv2/modify", // 알림마당/공지사항수정
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
