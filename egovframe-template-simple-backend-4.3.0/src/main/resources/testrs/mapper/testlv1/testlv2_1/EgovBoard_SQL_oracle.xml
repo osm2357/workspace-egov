@@ -101,6 +101,29 @@
 		
 	</insert>
 	
+	<insert id="insertBoardArticle1" parameterType="map">
+		<selectKey keyProperty="nttNo" resultType="java.lang.Long" order="BEFORE">
+			SELECT NVL(MAX(SORT_ORDR),0)+1 AS NTT_NO  FROM LETTNBBS
+			WHERE BBS_ID = #{bbsId}
+		</selectKey>
+		
+			INSERT INTO LETTNBBS
+			(NTT_ID, BBS_ID, NTT_SJ, NTT_CN, SORT_ORDR, 
+			 NTCR_ID, NTCR_NM, PASSWORD, RDCNT, 
+			 NTCE_BGNDE, NTCE_ENDDE, ANSWER_AT,  			   
+			 PARNTSCTT_NO, NTT_NO, ANSWER_LC, ATCH_FILE_ID,
+			 FRST_REGISTER_ID, FRST_REGIST_PNTTM, USE_AT
+			 )
+			VALUES
+			( #{nttId}, #{bbsId}, #{nttSj}, #{nttCn}, #{nttNo}, 
+			  #{ntcrId}, #{ntcrNm}, #{password}, #{inqireCo}, 
+			  #{ntceBgnde}, #{ntceEndde}, #{replyAt}, 
+			  #{parnts}, 1, #{replyLc}, #{atchFileId},
+			  #{frstRegisterId}, SYSDATE, 'Y'
+			 )			
+		
+	</insert>	
+	
 	<insert id="replyBoardArticle" parameterType="egovframework.let.cop.bbs.service.Board">
 		<selectKey keyProperty="nttNo" resultType="java.lang.Long" order="BEFORE">
 			SELECT NVL(MAX(NTT_NO),0)+1 AS NTT_NO  FROM LETTNBBS
@@ -225,7 +248,7 @@
 						
 	</select> 
  
- 	<update id="updateBoardArticle" parameterType="egovframework.let.cop.bbs.service.Board">
+ 	<update id="updateBoardArticle" parameterType="map">
  		
 			UPDATE LETTNBBS SET 
 				NTT_SJ = #{nttSj},
@@ -254,6 +277,18 @@
 			AND NTT_ID = #{nttId}
  		
  	</update>
+ 	
+ 	<update id="deleteBoardArticle1" parameterType="map">
+ 		
+			UPDATE LETTNBBS SET 
+				NTT_SJ = #{nttSj},
+				USE_AT = 'N',
+				LAST_UPDUSR_ID = #{lastUpdusrId},
+				LAST_UPDT_PNTTM = SYSDATE
+			WHERE BBS_ID = #{bbsId}
+			AND NTT_ID = #{nttId}
+ 		
+ 	</update> 	
 
  	<select id="selectMaxInqireCo" parameterType="egovframework.let.cop.bbs.service.BoardVO" resultType="java.lang.Integer">
  		

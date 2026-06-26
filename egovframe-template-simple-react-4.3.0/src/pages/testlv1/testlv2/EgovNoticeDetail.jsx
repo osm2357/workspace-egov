@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { useState, useEffect } from "react";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -49,13 +50,18 @@ function EgovNoticeDetail(props) {
   };
 
   const onClickDeleteBoardArticle = (bbsId, nttId) => {
-    const deleteBoardURL = `/testBoard/${bbsId}/${nttId}`;
+    const deleteBoardURL = `/testBoard-delete`;
 
     const requestOptions = {
       method: "PATCH",
       headers: {
         "Content-type": "application/json",
       },
+      body: JSON.stringify({
+	    bbsId: bbsId,
+	    nttId: nttId,
+	    atchFileId: boardDetail.atchFileId
+	  }),
     };
 
     EgovNet.requestFetch(deleteBoardURL, requestOptions, (resp) => {

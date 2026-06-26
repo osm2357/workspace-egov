@@ -39,7 +39,8 @@ function EgovNoticeEdit(props) {
           ...modeInfo,
           modeTitle: "등록",
           method: "POST",
-          editURL: "/testBoard",
+          //editURL: "/testBoard",
+          editURL: "/testBoard-insert",
         });
         break;
       case CODE.MODE_MODIFY:
@@ -208,6 +209,7 @@ function EgovNoticeEdit(props) {
                       setBoardDetail({ ...boardDetail, nttSj: e.target.value })
                     }
                     maxLength="60"
+                    placeholder="제목을 입력해주세요."
                   />
                 </dd>
               </dl>

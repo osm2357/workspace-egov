@@ -1,6 +1,7 @@
 package testlv1.testlv2.service.impl;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import egovframework.let.cop.bbs.service.Board;
 import egovframework.let.cop.bbs.service.BoardVO;
@@ -43,6 +44,14 @@ public class TestBBSManageDAO extends EgovAbstractMapper {
 
 	insert("TestBBSManageDAO.insertBoardArticle", board);
     }
+    
+    public void insertBoardArticle(Map<String, Object> commandMap) throws Exception {
+	long nttId = (Long)selectOne("BBSManageDAO.selectMaxNttId");
+	//board.setNttId(nttId);
+	commandMap.put("nttId", nttId);
+
+	insert("TestBBSManageDAO.insertBoardArticle1", commandMap);
+    }    
 
     /**
      * 게시판에 답변 게시물을 등록 한다.
@@ -115,6 +124,9 @@ public class TestBBSManageDAO extends EgovAbstractMapper {
     public void updateBoardArticle(Board board) throws Exception {
     	update("TestBBSManageDAO.updateBoardArticle", board);
     }
+    public void updateBoardArticle(Map<String, Object> commandMap) throws Exception {
+    	update("TestBBSManageDAO.updateBoardArticle", commandMap);
+    }    
 
     /**
      * 게시물 한 건을 삭제 한다.
@@ -125,6 +137,9 @@ public class TestBBSManageDAO extends EgovAbstractMapper {
     public void deleteBoardArticle(Board board) throws Exception {
     	update("TestBBSManageDAO.deleteBoardArticle", board);
     }
+    public void deleteBoardArticle(Map<String, Object> commandMap) throws Exception {
+    	update("TestBBSManageDAO.deleteBoardArticle1", commandMap);
+    }    
 
     /**
      * 게시물에 대한 조회 건수를 수정 한다.

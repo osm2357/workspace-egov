@@ -2,6 +2,8 @@ package testlv1.testlv2.service;
 
 import java.util.Map;
 
+import org.egovframe.rte.psl.dataaccess.util.EgovMap;
+
 import egovframework.let.cop.bbs.service.Board;
 import egovframework.let.cop.bbs.service.BoardVO;
 
@@ -32,6 +34,8 @@ public interface TestEgovBBSManageService {
 	 */
 	public void deleteBoardArticle(Board Board)
 	  throws Exception;
+	public void deleteBoardArticle(Map<String, Object> commandMap)
+			  throws Exception;	
 
 	/**
 	 * 방명록 내용을 삭제 한다.
@@ -60,6 +64,9 @@ public interface TestEgovBBSManageService {
 	 */
 	public void insertBoardArticle(Board Board)
 	  throws Exception;
+	
+	public void insertBoardArticle(Map<String, Object> commandMap)
+			  throws Exception;
 
 	/**
 	 * 게시물 대하여 상세 내용을 조회 한다.
@@ -100,5 +107,7 @@ public interface TestEgovBBSManageService {
 	 */
 	public void updateBoardArticle(Board Board)
 	  throws Exception;
+	public void updateBoardArticle(Map<String, Object> commandMap)
+			  throws Exception;	
 
 }

@@ -4,14 +4,17 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.egovframe.rte.fdl.cryptography.EgovCryptoService;
 import org.egovframe.rte.fdl.property.EgovPropertyService;
+import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -336,6 +339,76 @@ public class TestNoticeApiController {
 	 * @return resultVO
 	 * @throws Exception
 	 */
+//	@Operation(
+//			summary = "게시물 수정",
+//			description = "게시물에 대한 내용을 수정",
+//			security = {@SecurityRequirement(name = "Authorization")},
+//			tags = {"EgovBBSManageApiController"}
+//	)
+//	@ApiResponses(value = {
+//			@ApiResponse(responseCode = "200", description = "수정 성공"),
+//			@ApiResponse(responseCode = "403", description = "인가된 사용자가 아님"),
+//			@ApiResponse(responseCode = "900", description = "입력값 무결성 오류")
+//	})
+//	@PutMapping(value ="/testBoard/{nttId}")
+//	public ResultVO updateBoardArticle(final MultipartHttpServletRequest multiRequest,
+//		BoardVO boardVO,
+//		@Parameter(name = "nttId", description = "게시글 Id", in = ParameterIn.PATH, example="1")
+//		@PathVariable("nttId") String nttId,
+//		BindingResult bindingResult,
+//		HttpServletRequest request)
+//		throws Exception {
+//		ResultVO resultVO = new ResultVO();
+//
+//		// step 1. request header에서 토큰을 가져온다.
+//		String jwtToken = EgovStringUtil.isNullToString(request.getHeader(HEADER_STRING));
+//        // step 2. 토큰에 내용이 있는지 확인해서 id값을 가져옴
+//		String uniqId = jwtTokenUtil.getInfoFromToken("uniqId",jwtToken);
+//		String userNm = jwtTokenUtil.getInfoFromToken("name",jwtToken);
+//		// 사용자권한 처리
+//		LoginVO user = new LoginVO();
+//		user.setUniqId(uniqId); //고정값(USRCNFRM_00000000000)에서 로그인 시 사용자 고유ID값으로 변경
+//
+//		String atchFileId = boardVO.getAtchFileId().replaceAll("\\s", "");
+//
+//		beanValidator.validate(boardVO, bindingResult);
+//		if (bindingResult.hasErrors()) {
+//
+//			resultVO.setResultCode(ResponseCode.INPUT_CHECK_ERROR.getCode());
+//			resultVO.setResultMessage(ResponseCode.INPUT_CHECK_ERROR.getMessage());
+//
+//			return resultVO;
+//		}
+//	
+//		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+//		if (!files.isEmpty()) {
+//			if ("".equals(atchFileId)) {
+//				List<FileVO> result = fileUtil.parseFileInf(files, "BBS_", 0, atchFileId, "");
+//				atchFileId = fileMngService.insertFileInfs(result);
+//				boardVO.setAtchFileId(atchFileId);
+//			} else {
+//				FileVO fvo = new FileVO();
+//				fvo.setAtchFileId(atchFileId);
+//				int cnt = fileMngService.getMaxFileSN(fvo);
+//				List<FileVO> _result = fileUtil.parseFileInf(files, "BBS_", cnt, atchFileId, "");
+//				fileMngService.updateFileInfs(_result);
+//			}
+//		}
+//
+//		boardVO.setNttId(Long.parseLong(nttId));
+//		boardVO.setLastUpdusrId(user.getUniqId());
+//		boardVO.setNtcrNm(userNm); // jwt토큰값으로 추가. dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨) 
+//		boardVO.setPassword(EgovFileScrty.encryptPassword("", user.getUniqId())); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
+//		boardVO.setNttCn(unscript(boardVO.getNttCn())); // XSS 방지
+//
+//		bbsMngService.updateBoardArticle(boardVO);
+//
+//		resultVO.setResultCode(ResponseCode.SUCCESS.getCode());
+//		resultVO.setResultMessage(ResponseCode.SUCCESS.getMessage());
+//
+//		return resultVO;
+//	}
+	
 	@Operation(
 			summary = "게시물 수정",
 			description = "게시물에 대한 내용을 수정",
@@ -347,42 +420,38 @@ public class TestNoticeApiController {
 			@ApiResponse(responseCode = "403", description = "인가된 사용자가 아님"),
 			@ApiResponse(responseCode = "900", description = "입력값 무결성 오류")
 	})
-	@PutMapping(value ="/testBoard/{nttId}")
-	public ResultVO updateBoardArticle(final MultipartHttpServletRequest multiRequest,
-		BoardVO boardVO,
-		@Parameter(name = "nttId", description = "게시글 Id", in = ParameterIn.PATH, example="1")
-		@PathVariable("nttId") String nttId,
-		BindingResult bindingResult,
-		HttpServletRequest request)
+	@PutMapping(value ="/testBoard-update")
+	public ResultVO updateBoardArticle(final MultipartHttpServletRequest multiRequest, 
+		@RequestParam Map<String, Object> commandMap)
 		throws Exception {
 		ResultVO resultVO = new ResultVO();
 
 		// step 1. request header에서 토큰을 가져온다.
-		String jwtToken = EgovStringUtil.isNullToString(request.getHeader(HEADER_STRING));
+		String jwtToken = EgovStringUtil.isNullToString(multiRequest.getHeader(HEADER_STRING));
         // step 2. 토큰에 내용이 있는지 확인해서 id값을 가져옴
 		String uniqId = jwtTokenUtil.getInfoFromToken("uniqId",jwtToken);
 		String userNm = jwtTokenUtil.getInfoFromToken("name",jwtToken);
-		// 사용자권한 처리
-		LoginVO user = new LoginVO();
-		user.setUniqId(uniqId); //고정값(USRCNFRM_00000000000)에서 로그인 시 사용자 고유ID값으로 변경
+//		// 사용자권한 처리
+//		LoginVO user = new LoginVO();
+//		user.setUniqId(uniqId); //고정값(USRCNFRM_00000000000)에서 로그인 시 사용자 고유ID값으로 변경
 
-		String atchFileId = boardVO.getAtchFileId().replaceAll("\\s", "");
+		String atchFileId = ((String) commandMap.get("atchFileId")).replaceAll("\\s", "");
 
-		beanValidator.validate(boardVO, bindingResult);
-		if (bindingResult.hasErrors()) {
-
-			resultVO.setResultCode(ResponseCode.INPUT_CHECK_ERROR.getCode());
-			resultVO.setResultMessage(ResponseCode.INPUT_CHECK_ERROR.getMessage());
-
-			return resultVO;
-		}
+//		beanValidator.validate(boardVO, bindingResult);
+//		if (bindingResult.hasErrors()) {
+//
+//			resultVO.setResultCode(ResponseCode.INPUT_CHECK_ERROR.getCode());
+//			resultVO.setResultMessage(ResponseCode.INPUT_CHECK_ERROR.getMessage());
+//
+//			return resultVO;
+//		}
 	
 		final Map<String, MultipartFile> files = multiRequest.getFileMap();
 		if (!files.isEmpty()) {
 			if ("".equals(atchFileId)) {
 				List<FileVO> result = fileUtil.parseFileInf(files, "BBS_", 0, atchFileId, "");
 				atchFileId = fileMngService.insertFileInfs(result);
-				boardVO.setAtchFileId(atchFileId);
+				commandMap.put("atchFileId", atchFileId);
 			} else {
 				FileVO fvo = new FileVO();
 				fvo.setAtchFileId(atchFileId);
@@ -392,19 +461,19 @@ public class TestNoticeApiController {
 			}
 		}
 
-		boardVO.setNttId(Long.parseLong(nttId));
-		boardVO.setLastUpdusrId(user.getUniqId());
-		boardVO.setNtcrNm(userNm); // jwt토큰값으로 추가. dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨) 
-		boardVO.setPassword(EgovFileScrty.encryptPassword("", user.getUniqId())); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
-		boardVO.setNttCn(unscript(boardVO.getNttCn())); // XSS 방지
+		//commandMap.put("nttId", Long.parseLong(nttId));
+		commandMap.put("lastUpdusrId", uniqId);
+		commandMap.put("ntcrNm", userNm); // jwt토큰값으로 추가. dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨) 
+		commandMap.put("password", EgovFileScrty.encryptPassword("", uniqId)); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
+		commandMap.put("nttCn", unscript((String) commandMap.get("nttCn"))); // XSS 방지
 
-		bbsMngService.updateBoardArticle(boardVO);
+		bbsMngService.updateBoardArticle(commandMap);
 
 		resultVO.setResultCode(ResponseCode.SUCCESS.getCode());
 		resultVO.setResultMessage(ResponseCode.SUCCESS.getMessage());
 
 		return resultVO;
-	}
+	}	
 
 	/**
 	 * 게시물을 등록한다.
@@ -416,6 +485,66 @@ public class TestNoticeApiController {
 	 * @return
 	 * @throws Exception
 	 */
+//	@Operation(
+//			summary = "게시물 등록",
+//			description = "게시물을 등록",
+//			security = {@SecurityRequirement(name = "Authorization")},
+//			tags = {"EgovBBSManageApiController"}
+//	)
+//	@ApiResponses(value = {
+//			@ApiResponse(responseCode = "200", description = "등록 성공"),
+//			@ApiResponse(responseCode = "403", description = "인가된 사용자가 아님"),
+//			@ApiResponse(responseCode = "900", description = "입력값 무결성 오류")
+//	})
+//	@PostMapping(value ="/testBoard")
+//	public ResultVO insertBoardArticle(final MultipartHttpServletRequest multiRequest,	
+//		BoardVO boardVO,
+//		BindingResult bindingResult,
+//		HttpServletRequest request)
+//		throws Exception {
+//		ResultVO resultVO = new ResultVO();
+//
+//		// step 1. request header에서 토큰을 가져온다.
+//		String jwtToken = EgovStringUtil.isNullToString(request.getHeader(HEADER_STRING));
+//        // step 2. 토큰에 내용이 있는지 확인해서 id값을 가져옴
+//		String uniqId = jwtTokenUtil.getInfoFromToken("uniqId",jwtToken);
+//		String userNm = jwtTokenUtil.getInfoFromToken("name",jwtToken);
+//		// 사용자권한 처리
+//		LoginVO user = new LoginVO();
+//		user.setUniqId(uniqId); //고정값(USRCNFRM_00000000000)에서 로그인 시 사용자 고유ID값으로 변경
+//
+//		beanValidator.validate(boardVO, bindingResult);
+//		if (bindingResult.hasErrors()) {
+//			resultVO.setResultCode(ResponseCode.INPUT_CHECK_ERROR.getCode());
+//			resultVO.setResultMessage(ResponseCode.INPUT_CHECK_ERROR.getMessage());
+//
+//			return resultVO;
+//		}
+//	
+//		List<FileVO> result = null;
+//		String atchFileId = "";
+//
+//		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+//		if (!files.isEmpty()) {
+//			result = fileUtil.parseFileInf(files, "BBS_", 0, "", "");
+//			atchFileId = fileMngService.insertFileInfs(result);
+//		}
+//		boardVO.setAtchFileId(atchFileId);
+//		boardVO.setFrstRegisterId(user.getUniqId());
+//		boardVO.setBbsId(boardVO.getBbsId());
+//
+//		boardVO.setNtcrNm(userNm); //jwt토큰값으로 추가. dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
+//		boardVO.setPassword(EgovFileScrty.encryptPassword("", user.getUniqId())); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
+//		// board.setNttCn(unscript(board.getNttCn())); // XSS 방지
+//
+//		bbsMngService.insertBoardArticle(boardVO);
+//	
+//
+//		resultVO.setResultCode(ResponseCode.SUCCESS.getCode());
+//		resultVO.setResultMessage(ResponseCode.SUCCESS.getMessage());
+//		return resultVO;
+//	}
+	
 	@Operation(
 			summary = "게시물 등록",
 			description = "게시물을 등록",
@@ -427,32 +556,16 @@ public class TestNoticeApiController {
 			@ApiResponse(responseCode = "403", description = "인가된 사용자가 아님"),
 			@ApiResponse(responseCode = "900", description = "입력값 무결성 오류")
 	})
-	@PostMapping(value ="/testBoard")
-	public ResultVO insertBoardArticle(final MultipartHttpServletRequest multiRequest,
-		@RequestBody Map<String, Object> requestData,	
-		BoardVO boardVO,
-		BindingResult bindingResult,
-		HttpServletRequest request)
+	@PostMapping(value ="/testBoard-insert")
+	public ResultVO insertBoardArticle1(final MultipartHttpServletRequest multiRequest, @RequestParam Map<String, Object> commandMap)
 		throws Exception {
-		ResultVO resultVO = new ResultVO();
-
 		// step 1. request header에서 토큰을 가져온다.
-		String jwtToken = EgovStringUtil.isNullToString(request.getHeader(HEADER_STRING));
+		String jwtToken = EgovStringUtil.isNullToString(multiRequest.getHeader(HEADER_STRING));
         // step 2. 토큰에 내용이 있는지 확인해서 id값을 가져옴
 		String uniqId = jwtTokenUtil.getInfoFromToken("uniqId",jwtToken);
 		String userNm = jwtTokenUtil.getInfoFromToken("name",jwtToken);
-		// 사용자권한 처리
-		LoginVO user = new LoginVO();
-		user.setUniqId(uniqId); //고정값(USRCNFRM_00000000000)에서 로그인 시 사용자 고유ID값으로 변경
-
-		beanValidator.validate(boardVO, bindingResult);
-		if (bindingResult.hasErrors()) {
-			resultVO.setResultCode(ResponseCode.INPUT_CHECK_ERROR.getCode());
-			resultVO.setResultMessage(ResponseCode.INPUT_CHECK_ERROR.getMessage());
-
-			return resultVO;
-		}
-	
+        
+        
 		List<FileVO> result = null;
 		String atchFileId = "";
 
@@ -461,21 +574,23 @@ public class TestNoticeApiController {
 			result = fileUtil.parseFileInf(files, "BBS_", 0, "", "");
 			atchFileId = fileMngService.insertFileInfs(result);
 		}
-		boardVO.setAtchFileId(atchFileId);
-		boardVO.setFrstRegisterId(user.getUniqId());
-		boardVO.setBbsId(boardVO.getBbsId());
+		commandMap.put("atchFileId", atchFileId);
+		commandMap.put("frstRegisterId", uniqId);		
 
-		boardVO.setNtcrNm(userNm); //jwt토큰값으로 추가. dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
-		boardVO.setPassword(EgovFileScrty.encryptPassword("", user.getUniqId())); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
-		// board.setNttCn(unscript(board.getNttCn())); // XSS 방지
-
-		bbsMngService.insertBoardArticle(boardVO);
-	
-
+		
+		commandMap.put("ntcrNm", userNm); //jwt토큰값으로 추가. dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
+		commandMap.put("password", EgovFileScrty.encryptPassword("", uniqId)); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
+		
+        bbsMngService.insertBoardArticle(commandMap);
+		
+        
+		ResultVO resultVO = new ResultVO();
+		
 		resultVO.setResultCode(ResponseCode.SUCCESS.getCode());
 		resultVO.setResultMessage(ResponseCode.SUCCESS.getMessage());
+		
 		return resultVO;
-	}
+	}	
 
 	/**
 	 * 게시물에 대한 답변을 등록한다.
@@ -572,24 +687,17 @@ public class TestNoticeApiController {
 			@ApiResponse(responseCode = "200", description = "삭제 성공"),
 			@ApiResponse(responseCode = "403", description = "인가된 사용자가 아님")
 	})
-	@PatchMapping(value = "/testBoard/{bbsId}/{nttId}")
+	@PatchMapping(value = "/testBoard-delete")
 	public ResultVO deleteBoardArticle(
-		@Parameter(name = "bbsId", description = "게시판 Id", in = ParameterIn.PATH, example="BBSMSTR_AAAAAAAAAAAA")	
-		@PathVariable("bbsId") String bbsId,
-		@Parameter(name = "nttId", description = "게시글 Id", in = ParameterIn.PATH, example="1")
-		@PathVariable("nttId") String nttId,
 		@Parameter(hidden = true) @AuthenticationPrincipal LoginVO user,
-		HttpServletRequest request)
+		@RequestBody Map<String, Object> commandMap)
 
 		throws Exception {
 		ResultVO resultVO = new ResultVO();
-		BoardVO boardVO = new BoardVO();
 
-		boardVO.setBbsId(bbsId);
-		boardVO.setNttId(Long.parseLong(nttId));
-		boardVO.setLastUpdusrId(user.getUniqId());
+		commandMap.put("lastUpdusrId", user.getUniqId());
 
-		bbsMngService.deleteBoardArticle(boardVO);
+		bbsMngService.deleteBoardArticle(commandMap);
 		
 		resultVO.setResultCode(ResponseCode.SUCCESS.getCode());
 		resultVO.setResultMessage(ResponseCode.SUCCESS.getMessage());

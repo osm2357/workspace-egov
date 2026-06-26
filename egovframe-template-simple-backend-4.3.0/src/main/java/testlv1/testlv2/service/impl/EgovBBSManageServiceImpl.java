@@ -19,6 +19,7 @@ import egovframework.let.utl.fcc.service.EgovDateUtil;
 
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.egovframe.rte.fdl.property.EgovPropertyService;
+import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 
 /**
  * 게시물 관리를 위한 서비스 구현 클래스
@@ -68,6 +69,20 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 			fileService.deleteAllFileInf(fvo);
 		}
 	}
+	@Override
+	public void deleteBoardArticle(Map<String, Object> commandMap) throws Exception {
+		FileVO fvo = new FileVO();
+
+		fvo.setAtchFileId((String) commandMap.get("atchFileId"));
+
+		commandMap.put("nttSj", "이 글은 작성자에 의해서 삭제되었습니다.");
+
+		bbsMngDAO.deleteBoardArticle(commandMap);
+
+		if (!"".equals(fvo.getAtchFileId())) {
+			fileService.deleteAllFileInf(fvo);
+		}
+	}	
 
 	/**
 	 * 게시판에 게시물 또는 답변 게시물을 등록 한다.
@@ -95,6 +110,19 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 			bbsMngDAO.insertBoardArticle(board);
 		}
 	}
+	
+	@Override
+	public void insertBoardArticle(Map<String, Object> commandMap) throws Exception {
+
+//			commandMap.setParnts("0");
+//			commandMap.setReplyLc("0");
+//			commandMap.setReplyAt("N");
+			commandMap.put("parnts", "0");
+			commandMap.put("replyLc", "0");
+			commandMap.put("replyAt", "N");
+
+			bbsMngDAO.insertBoardArticle(commandMap);
+	}	
 
 	/**
 	 * 게시물 대하여 상세 내용을 조회 한다.
@@ -167,6 +195,10 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 	public void updateBoardArticle(Board board) throws Exception {
 		bbsMngDAO.updateBoardArticle(board);
 	}
+	@Override
+	public void updateBoardArticle(Map<String, Object> commandMap) throws Exception {
+		bbsMngDAO.updateBoardArticle(commandMap);
+	}	
 
 	/**
 	 * 방명록 내용을 삭제 한다.
